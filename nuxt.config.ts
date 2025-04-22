@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import Aura from '@primeuix/themes/aura';
 import tailwindcss from "@tailwindcss/vite";
+import {SagaFlipbook} from "./themes/primevue";
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -21,8 +21,13 @@ export default defineNuxtConfig({
   primevue: {
     options: {
       theme: {
-        preset: Aura
+        preset: SagaFlipbook,
       }
+    }
+  },
+  runtimeConfig: {
+    public: {
+      accessToken: process.env.PUBLIC_ACCESS_TOKEN
     }
   }
 })

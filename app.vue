@@ -1,7 +1,11 @@
-<template>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+<script lang="ts" setup>
+definePageMeta({
+  middleware: 'auth'
+})
+const route = useRoute()
+const pdfUrl = computed(() => route.query.pdf_url as string)
+</script>
 
- <Button label="Verify" />
+<template>
+
 </template>
