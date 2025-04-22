@@ -3,5 +3,5 @@
     Hello world!
   </h1>
 
-<!--  <Button label="Verify" />-->
+ <Button label="Verify" />
 </template>

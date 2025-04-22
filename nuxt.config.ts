@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from "@tailwindcss/vite";
 import Aura from '@primeuix/themes/aura';
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -8,14 +8,16 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/main.css'
   ],
+  
+  modules: [
+    '@primevue/nuxt-module'
+  ],
+
   vite: {
     plugins: [
       tailwindcss(),
     ],
   },
-  modules: [
-    '@primevue/nuxt-module'
-  ],
   primevue: {
     options: {
       theme: {
