@@ -4,9 +4,13 @@ import {SagaFlipbook} from "./themes/primevue";
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true
+  },
   css: [
-    '~/assets/css/main.css'
+    '~/assets/css/main.css',
+    '~/assets/styles/main.scss',
+    'primeicons/primeicons.css'
   ],
   
   modules: [
@@ -29,5 +33,5 @@ export default defineNuxtConfig({
     public: {
       accessToken: process.env.PUBLIC_ACCESS_TOKEN
     }
-  }
+  },
 })

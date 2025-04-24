@@ -4,7 +4,10 @@ export default defineNuxtRouteMiddleware((to) => {
     const tokenFromUrl = to.query.auth_token
 
     if (tokenFromUrl !== expectedToken) {
-        // return abortNavigation("Clé d'accès invalide")
-        return navigateTo('/unauthorized')
+        throw createError({
+            statusCode: 401,
+            statusMessage: 'Accès refusé : token manquant ou invalide',
+            fatal: true
+        })
     }
 })
