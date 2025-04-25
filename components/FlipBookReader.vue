@@ -43,30 +43,6 @@ type Props = {
     }
   };
 
-  // const loadPdfToCanvas = async () => {
-  //   if (!props.src) return;
-  //
-  //   const loadingTask = getDocument(props.src);
-  //   const pdf = await loadingTask.promise;
-  //
-  //   for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-  //     const page = await pdf.getPage(pageNumber);
-  //     const viewport = page.getViewport({ scale: 1 });
-  //
-  //     const canvas = document.createElement('canvas');
-  //     const context = canvas.getContext('2d')!;
-  //     canvas.width = viewport.width;
-  //     canvas.height = viewport.height;
-  //
-  //     await page.render({
-  //       canvasContext: context,
-  //       viewport: viewport,
-  //     }).promise;
-  //
-  //     pdfContainer.value?.appendChild(canvas);
-  //   }
-  // };
-
   const flipNext = () => {
     if (pageFlip.value) {
       pageFlip.value.flipNext();
@@ -122,6 +98,12 @@ type Props = {
     { immediate: true }
   );
 
+  onMounted(() => {
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('html')!.classList.add('overflow-hidden');
+    })
+  })
+
 </script>
 
 <template>
@@ -135,20 +117,22 @@ type Props = {
         Télécharger le PDF
       </Button>
     </nav>
-    <div class="w-full h-full flex justify-center items-center flex-col">
-      <h1>Pages du PDF</h1>
-      <div
-        class="flex gap-4 items-center justify-center m-4"
+    <div class="w-full h-full flex justify-center items-center flex-row gap-4">
+      <Button
+        @click="flipPrev"
+        :pt="{
+          root: {
+            // class: 'rounded-full',
+            style: {
+              borderRadius: '9999px',
+              width: '2.5rem',
+              height: '2.5rem',
+            }
+          }
+        }"
       >
-        <Button
-            @click="flipPrev"
-            label="Précédent"
-        />
-        <Button
-            @click="flipNext"
-            label="Suivant"
-        />
-      </div>
+        <i class="pi pi-arrow-circle-left"></i>
+      </Button>
       <div
           v-if="pdfIsLoading"
       >
@@ -156,7 +140,9 @@ type Props = {
         <span class="ml-2">Chargement</span>
 
       </div>
-      <div class="grid grid-cols-1 gap-4 w-auto h-[80vh] book">
+      <div
+        class="book"
+      >
         <div
           v-for="pageNum in pageNums"
           :key="pageNum"
@@ -181,22 +167,21 @@ type Props = {
           </div>
         </div>
       </div>
-
-      <!--      <VuePdfEmbed-->
-<!--        textLayer-->
-<!--        :source="{-->
-<!--          cMapUrl: 'https://unpkg.com/pdfjs-dist/cmaps/',-->
-<!--          url: props.src,-->
-<!--        }"-->
-<!--        :width="800"-->
-<!--        @rendered="() => {-->
-<!--            pdfIsLoading = false;-->
-<!--          }"-->
-<!--        class="grid grid-cols-1 gap-4 w-auto h-[90vh] overflow-auto"-->
-
-<!--      />-->
+      <Button
+        @click="flipNext"
+        :pt="{
+          root: {
+            style: {
+              borderRadius: '9999px',
+              width: '2.5rem',
+              height: '2.5rem',
+            }
+          }
+        }"
+        >
+        <i class="pi pi-arrow-circle-right"></i>
+      </Button>
     </div>
-
   </div>
 </template>
 
