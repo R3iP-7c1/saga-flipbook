@@ -5,6 +5,7 @@ import 'vue-pdf-embed/dist/styles/textLayer.css'
 import 'vue-pdf-embed/dist/styles/annotationLayer.css'
 import {PageFlip} from "page-flip/src/PageFlip";
 import {SizeType} from "page-flip/src/Settings";
+import Zoomist from "zoomist";
 
 type Props = {
     src: string | undefined;
@@ -20,6 +21,8 @@ type Props = {
   const loadCounter = ref<number>(0);
 
   const { doc } = useVuePdfEmbed({source: props.src})
+
+  const zoomist = ref();
 
   const downloadFile = async () => {
     if (props.src) {
@@ -43,30 +46,6 @@ type Props = {
     }
   };
 
-  // const loadPdfToCanvas = async () => {
-  //   if (!props.src) return;
-  //
-  //   const loadingTask = getDocument(props.src);
-  //   const pdf = await loadingTask.promise;
-  //
-  //   for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-  //     const page = await pdf.getPage(pageNumber);
-  //     const viewport = page.getViewport({ scale: 1 });
-  //
-  //     const canvas = document.createElement('canvas');
-  //     const context = canvas.getContext('2d')!;
-  //     canvas.width = viewport.width;
-  //     canvas.height = viewport.height;
-  //
-  //     await page.render({
-  //       canvasContext: context,
-  //       viewport: viewport,
-  //     }).promise;
-  //
-  //     pdfContainer.value?.appendChild(canvas);
-  //   }
-  // };
-
   const flipNext = () => {
     if (pageFlip.value) {
       pageFlip.value.flipNext();
@@ -86,7 +65,6 @@ type Props = {
       pageFlip.value?.updateFromHtml(document.querySelectorAll('.book-page')!);
     }
     loadCounter.value++;
-
   }
 
   watch(
@@ -122,6 +100,14 @@ type Props = {
     { immediate: true }
   );
 
+  onMounted(() => {
+    zoomist.value = new Zoomist('.zoomist-container', {
+      maxScale: 2,
+      minScale: 0.5,
+      zoomer: true
+    })
+  })
+
 </script>
 
 <template>
@@ -136,7 +122,6 @@ type Props = {
       </Button>
     </nav>
     <div class="w-full h-full flex justify-center items-center flex-col">
-      <h1>Pages du PDF</h1>
       <div
         class="flex gap-4 items-center justify-center m-4"
       >
@@ -150,51 +135,50 @@ type Props = {
         />
       </div>
       <div
+        class="flex gap-4 items-center justify-center m-4 custom-zoomist-zoomer"
+        >
+        <Button class="custom-zoomer-in" label="+"/>
+        <Button class="custom-zoomer-out" label="-"/>
+      </div>
+      <div
           v-if="pdfIsLoading"
       >
         <i class="pi pi-spin pi-spinner"></i>
-        <span class="ml-2">Chargement</span>
+        <span class="ml-2">Chargement...</span>
 
       </div>
-      <div class="grid grid-cols-1 gap-4 w-auto h-[80vh] book">
-        <div
-          v-for="pageNum in pageNums"
-          :key="pageNum"
-          ref="pageRefs"
-          class="book-page">
-          <VuePdfEmbed
-            v-if="pageVisibility[pageNum]"
-            text-layer
-            :source="doc"
-            :page="pageNum"
-            :width="600"
-            @rendered="
-              htmlPdfLoader()
-            "
-          >
-          </VuePdfEmbed>
-          <div
-            v-else
-            class="w-full h-full flex justify-center items-center bg-neutral-800 text-white"
-          >
-            <span class="text-sm font-semibold">Page {{ pageNum }}</span>
+      <div class="zoomist-container">
+        <div class="zoomist-wrapper">
+          <div class="zoomist-image">
+
+            <div class="grid grid-cols-1 gap-4 w-auto h-[80vh] book">
+              <div
+                v-for="pageNum in pageNums"
+                :key="pageNum"
+                ref="pageRefs"
+                class="book-page">
+                <VuePdfEmbed
+                  v-if="pageVisibility[pageNum]"
+                  text-layer
+                  :source="doc"
+                  :page="pageNum"
+                  :width="600"
+                  @rendered="
+                    htmlPdfLoader()
+                  "
+                >
+                </VuePdfEmbed>
+                <div
+                  v-else
+                  class="w-full h-full flex justify-center items-center bg-neutral-800 text-white"
+                >
+                  <span class="text-sm font-semibold">Page {{ pageNum }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <!--      <VuePdfEmbed-->
-<!--        textLayer-->
-<!--        :source="{-->
-<!--          cMapUrl: 'https://unpkg.com/pdfjs-dist/cmaps/',-->
-<!--          url: props.src,-->
-<!--        }"-->
-<!--        :width="800"-->
-<!--        @rendered="() => {-->
-<!--            pdfIsLoading = false;-->
-<!--          }"-->
-<!--        class="grid grid-cols-1 gap-4 w-auto h-[90vh] overflow-auto"-->
-
-<!--      />-->
     </div>
 
   </div>
