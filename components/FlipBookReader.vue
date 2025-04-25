@@ -108,6 +108,12 @@ type Props = {
     })
   })
 
+  onMounted(() => {
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('html')!.classList.add('overflow-hidden');
+    })
+  })
+
 </script>
 
 <template>
@@ -121,25 +127,22 @@ type Props = {
         Télécharger le PDF
       </Button>
     </nav>
-    <div class="w-full h-full flex justify-center items-center flex-col">
-      <div
-        class="flex gap-4 items-center justify-center m-4"
+    <div class="w-full h-full flex justify-center items-center flex-row gap-4">
+      <Button
+        @click="flipPrev"
+        :pt="{
+          root: {
+            // class: 'rounded-full',
+            style: {
+              borderRadius: '9999px',
+              width: '2.5rem',
+              height: '2.5rem',
+            }
+          }
+        }"
       >
-        <Button
-            @click="flipPrev"
-            label="Précédent"
-        />
-        <Button
-            @click="flipNext"
-            label="Suivant"
-        />
-      </div>
-      <div
-        class="flex gap-4 items-center justify-center m-4 custom-zoomist-zoomer"
-        >
-        <Button class="custom-zoomer-in" label="+"/>
-        <Button class="custom-zoomer-out" label="-"/>
-      </div>
+        <i class="pi pi-arrow-circle-left"></i>
+      </Button>
       <div
           v-if="pdfIsLoading"
       >
@@ -150,8 +153,7 @@ type Props = {
       <div class="zoomist-container">
         <div class="zoomist-wrapper">
           <div class="zoomist-image">
-
-            <div class="grid grid-cols-1 gap-4 w-auto h-[80vh] book">
+            <div class="book">
               <div
                 v-for="pageNum in pageNums"
                 :key="pageNum"
@@ -179,6 +181,20 @@ type Props = {
           </div>
         </div>
       </div>
+      <Button
+        @click="flipNext"
+        :pt="{
+          root: {
+            style: {
+              borderRadius: '9999px',
+              width: '2.5rem',
+              height: '2.5rem',
+            }
+          }
+        }"
+        >
+        <i class="pi pi-arrow-circle-right"></i>
+      </Button>
     </div>
 
   </div>
