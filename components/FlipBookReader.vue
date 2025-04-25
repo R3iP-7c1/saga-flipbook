@@ -93,6 +93,15 @@ type Props = {
           }
         });
 
+        zoomist.value = new Zoomist('.zoomist-container', {
+          maxScale: 2,
+          minScale: 0.5,
+          zoomer: {
+            inEl: '.custom-zoomer-in',
+            outEl: '.custom-zoomer-out'
+          }
+        })
+
         pdfIsLoading.value = false;
 
       }
@@ -101,17 +110,7 @@ type Props = {
   );
 
   onMounted(() => {
-    zoomist.value = new Zoomist('.zoomist-container', {
-      maxScale: 2,
-      minScale: 0.5,
-      zoomer: true
-    })
-  })
 
-  onMounted(() => {
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('html')!.classList.add('overflow-hidden');
-    })
   })
 
 </script>
@@ -126,13 +125,16 @@ type Props = {
       >
         Télécharger le PDF
       </Button>
+      <div class="custom-zoomist-zoomer gap-2 flex flex-row items-center justify-center">
+        <Button class="custom-zoomer-in" label="+"></Button>
+        <Button class="custom-zoomer-out" label="-"></Button>
+      </div>
     </nav>
     <div class="w-full h-full flex justify-center items-center flex-row gap-4">
       <Button
         @click="flipPrev"
         :pt="{
           root: {
-            // class: 'rounded-full',
             style: {
               borderRadius: '9999px',
               width: '2.5rem',
