@@ -8,8 +8,8 @@
 
 <style lang="scss">
 
-html {
-  overflow: hidden;
+html, body {
+  overflow: hidden !important;
 }
 
 </style>

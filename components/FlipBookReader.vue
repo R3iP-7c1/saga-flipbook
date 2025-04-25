@@ -185,7 +185,7 @@ type Props = {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .vue-pdf-embed {
   div {
