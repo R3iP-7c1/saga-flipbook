@@ -97,13 +97,6 @@ type Props = {
     },
     { immediate: true }
   );
-
-  onMounted(() => {
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('html')!.classList.add('overflow-hidden');
-    })
-  })
-
 </script>
 
 <template>
